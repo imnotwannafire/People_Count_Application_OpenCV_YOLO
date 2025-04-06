@@ -41,7 +41,7 @@ def click(event, x, y, flags, param):
 cv2.namedWindow("Image")
 cv2.setMouseCallback("Image", click)
 # cap = cv2.VideoCapture(0)
-cap = cv2.VideoCapture("../videos/people.mp4")
+cap = cv2.VideoCapture("./people.mp4")
 cap.set(3, 1280)
 cap.set(4, 720)
 model = YOLO('yolo_weights/yolov8n.pt')
