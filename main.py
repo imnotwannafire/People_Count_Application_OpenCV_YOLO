@@ -60,7 +60,7 @@ tracker = Sort(max_age=10, min_hits=3, iou_threshold=0.3)
 limits_up = [230, 400, 673, 400]
 limits_down = [230, 400, 673, 400]
 totalCountup = []
-totalCountdowm= []
+totalCountdown= []
 totalPoint = 0
 success, img = cap.read()
 mask = np.zeros_like(img, dtype=np.uint8)
@@ -133,6 +133,7 @@ while cap.isOpened():
                 detections = np.vstack((detections,currentArray))
     resultTrackers = tracker.update(detections)
     cv2.line(img, (limits_up[0], limits_up[1]), (limits_up[2], limits_up[3]), (0,0,255),5)
+    cv2.line(img, (limits_down[0], limits_down[1]), (limits_down[2], limits_down[3]), (0, 0, 255), 5)
     # cv2.line(img, (limits_down[0], limits_down[1]), (limits_down[2], limits_down[3]), (0, 0, 255), 5)
     for result in resultTrackers:
         x1, y1, x2, y2, id = result
@@ -143,12 +144,17 @@ while cap.isOpened():
                            thickness=1, offset=5)
         cx, cy = x1+w//2, y1+h//2
         cv2.circle(img,(cx,cy), radius=5, color=(255,0,255), thickness=cv2.FILLED)
-        if limits_up[0] < cx < limits_up[2] and limits_up[1]-15 < cy < limits_up[1]+15:
+        if limits_up[0] < cx < limits_up[2] and limits_up[1]-10 < cy < limits_up[1]+10:
             if totalCountup.count(id)==0:
                 totalCountup.append(id)
                 cv2.line(img, (limits_up[0], limits_up[1]), (limits_up[2], limits_up[3]), (0, 255, 0), 5)
+        elif limits_down[0] < cx < limits_down[2] and limits_down[1]-10 < cy < limits_down[1]+10:
+            if totalCountdown.count(id)==0:
+                totalCountdown.append(id)
+                cv2.line(img, (limits_down[0], limits_down[1]), (limits_down[2], limits_down[3]), (0, 255, 0), 5)
     # cvzone.putTextRect(img, f'Count: {len(totalCount)}', (50, 50))
-    cv2.putText(img, str(len(totalCountup)), (255, 100), cv2.FONT_HERSHEY_PLAIN, 5, color=(50,50,255), thickness=8)
+    cv2.putText(img, str(len(totalCountup)), (850, 185), cv2.FONT_HERSHEY_PLAIN, 5, color=(139,195,75), thickness=7)
+    cv2.putText(img, str(len(totalCountdown)), (1100, 185), cv2.FONT_HERSHEY_PLAIN, 5, color=(139, 195, 75), thickness=7)
     cv2.imshow("Image", img)
     cv2.waitKey(1)
 cap.release()
